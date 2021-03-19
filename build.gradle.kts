@@ -11,6 +11,7 @@ korge {
 repositories {
     maven("https://jitpack.io")
 }
+
 val ldtkApiVersion: String by project
 
 kotlin {
@@ -29,7 +30,6 @@ kotlin {
                             org.jetbrains.kotlin.gradle.plugin.KotlinPlatformType.attribute,
                             org.jetbrains.kotlin.gradle.plugin.KotlinPlatformType.jvm // pass in the JVM
                         )
-                        attributes.attribute(Usage.USAGE_ATTRIBUTE, objects.named(Usage::class.java, Usage.JAVA_RUNTIME))
                     }
                 }
                 configurations["kapt"].dependencies.add(project.dependencies.create("com.lehaine.kt-ldtk-api:ldtk-processor:$ldtkApiVersion"))
