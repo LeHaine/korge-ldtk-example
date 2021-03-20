@@ -17,6 +17,7 @@ val ldtkApiVersion: String by project
 kotlin {
     sourceSets {
         val commonMain by getting {
+            kotlin.srcDir("$buildDir/generated/source/kaptKotlin/main")
             dependencies {
                 implementation("com.lehaine.kt-ldtk-api:ldtk-api:$ldtkApiVersion")
             }
@@ -37,3 +38,5 @@ kotlin {
         }
     }
 }
+
+tasks.getByName("compileKotlinMetadata").dependsOn("kaptKotlinJvm")
