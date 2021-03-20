@@ -25,8 +25,8 @@ suspend fun main() = Korge(width = 512, height = 512, bgcolor = Colors["#2b2b2b"
     }
 
     val world = World()
-    world.load()
-    val level = world.allLevels[0].apply { load() }
+    world.loadAsync()
+    val level = world.allLevels[0].apply { loadAsync() }
     level.layerEntities.allPlayer.forEach {
         println(it)
     }
