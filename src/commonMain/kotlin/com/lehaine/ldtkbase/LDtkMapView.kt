@@ -23,6 +23,7 @@ class LDtkMapView(val level: Level, val tileset: TileSet, val debugEntities: Boo
             val view: View = when (layer) {
                 is LayerTiles,
                 is LayerAutoLayer,
+                is LayerIntGrid,
                 is LayerIntGridAutoLayer -> ldtkLayer(layer, tileset)
                 is LayerEntities -> {
                     if (debugEntities) {

@@ -19,8 +19,8 @@ kotlin {
         val commonMain by getting {
             kotlin.srcDir("$buildDir/generated/source/kaptKotlin/main")
             dependencies {
-                implementation("com.lehaine.kt-ldtk-api:ldtk-api:$ldtkApiVersion")
-                //implementation("com.lehaine:ldtk-api:$ldtkApiVersion") // local repo
+                //implementation("com.lehaine.kt-ldtk-api:ldtk-api:$ldtkApiVersion")
+                implementation("com.lehaine:ldtk-api:$ldtkApiVersion") // local repo
             }
         }
 
@@ -34,8 +34,8 @@ kotlin {
                         )
                     }
                 }
-                configurations["kapt"].dependencies.add(project.dependencies.create("com.lehaine.kt-ldtk-api:ldtk-processor:$ldtkApiVersion"))
-                // configurations["kapt"].dependencies.add(project.dependencies.create("com.lehaine:ldtk-processor:$ldtkApiVersion")) // local repo
+                //configurations["kapt"].dependencies.add(project.dependencies.create("com.lehaine.kt-ldtk-api:ldtk-processor:$ldtkApiVersion"))
+                 configurations["kapt"].dependencies.add(project.dependencies.create("com.lehaine:ldtk-processor:$ldtkApiVersion")) // local repo
             }
         }
     }

@@ -9,7 +9,7 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "0.8.1",
-	"nextUid": 64,
+	"nextUid": 66,
 	"worldLayout": "Free",
 	"worldGridWidth": 256,
 	"worldGridHeight": 256,
@@ -440,6 +440,29 @@
 		},
 		{
 			"__type": "IntGrid",
+			"identifier": "ExtraInfo",
+			"type": "IntGrid",
+			"uid": 65,
+			"gridSize": 8,
+			"displayOpacity": 1,
+			"pxOffsetX": 0,
+			"pxOffsetY": 0,
+			"requiredTags": [],
+			"excludedTags": [],
+			"intGridValues": [
+				{ "value": 1, "identifier": "Bad", "color": "#BD0000" },
+				{ "value": 2, "identifier": "Eh", "color": "#5B60BD" },
+				{ "value": 3, "identifier": null, "color": "#429C40" }
+			],
+			"autoTilesetDefUid": null,
+			"autoRuleGroups": [],
+			"autoSourceLayerDefUid": null,
+			"tilesetDefUid": null,
+			"tilePivotX": 0,
+			"tilePivotY": 0
+		},
+		{
+			"__type": "IntGrid",
 			"identifier": "Cavern_background",
 			"type": "IntGrid",
 			"uid": 48,
@@ -812,10 +835,7 @@
 			"spacing": 0,
 			"padding": 0,
 			"savedSelections": [],
-			"cachedPixelData": {
-				"opaqueTiles": "0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
-				"averageColors": "566745674678935885676855666775836556684400006974845687448973756786328645853385338533000084459447467966539633a5569754a63296329543000086326754964386549655455657665963364335450000564457524655574436549753853288536632864400007743964283467632654699757d9297436789575600008565795486837a64766979889975896378436572000000000000000000000000000000000000000000000000"
-			}
+			"cachedPixelData": null
 		}
 	], "enums": [
 		{ "identifier": "Items", "uid": 30, "values": [

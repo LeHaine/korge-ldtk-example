@@ -15,7 +15,9 @@ import com.soywiz.korge.view.addTo
 import com.soywiz.korge.view.tiles.TileSet
 import com.soywiz.korim.bitmap.Bitmap
 import com.soywiz.korim.bitmap.Bitmaps
+import com.soywiz.korim.bitmap.BmpSlice
 import com.soywiz.korim.color.ColorAdd
+import com.soywiz.korim.color.Colors
 import com.soywiz.korim.color.RGBA
 import com.soywiz.korma.geom.Point
 import com.soywiz.korma.geom.Rectangle
@@ -129,23 +131,45 @@ class LDtkLayerView(val layer: Layer, val tileset: TileSet) : View() {
             for (cx in xmin until xmax) {
                 when (layer.type) {
                     LayerType.IntGrid -> {
-                        layer as LayerIntGridAutoLayer
-                        val tile = layer.autoTilesCoordIdMap[layer.getCoordId(cx, cy)] ?: continue
-                        renderTile(
-                            tile.tileId,
-                            tile.flips,
-                            cx,
-                            cy,
-                            posX,
-                            posY,
-                            dUX,
-                            dUY,
-                            dVX,
-                            dVY,
-                            allocTiles,
-                            colAdd,
-                            colMul
-                        )
+                        if (layer is LayerIntGridAutoLayer) {
+                            val tile = layer.autoTilesCoordIdMap[layer.getCoordId(cx, cy)] ?: continue
+                            renderTile(
+                                tileset[tile.tileId] ?: error("unable to get tile from tileset!"),
+                                tile.flips,
+                                cx,
+                                cy,
+                                posX,
+                                posY,
+                                dUX,
+                                dUY,
+                                dVX,
+                                dVY,
+                                allocTiles,
+                                colAdd,
+                                colMul
+                            )
+                        } else {
+                            layer as LayerIntGrid
+                            if (layer.hasValue(cx, cy)) {
+                                val hex = layer.getColorHex(cx, cy) ?: continue
+                                val color = Colors[hex]
+                                renderTile(
+                                    Bitmaps.white,
+                                    0,
+                                    cx,
+                                    cy,
+                                    posX,
+                                    posY,
+                                    dUX,
+                                    dUY,
+                                    dVX,
+                                    dVY,
+                                    allocTiles,
+                                    colAdd,
+                                    color
+                                )
+                            }
+                        }
                     }
                     LayerType.Tiles -> {
                         layer as LayerTiles
@@ -153,7 +177,7 @@ class LDtkLayerView(val layer: Layer, val tileset: TileSet) : View() {
                             layer.getTileStackAt(cx, cy).forEach {
                                 count++
                                 renderTile(
-                                    it.tileId,
+                                    tileset[it.tileId] ?: error("unable to get tile from tileset!"),
                                     it.flipBits,
                                     cx,
                                     cy,
@@ -174,7 +198,7 @@ class LDtkLayerView(val layer: Layer, val tileset: TileSet) : View() {
                         layer as LayerAutoLayer
                         val tile = layer.autoTiles.findTileAt(cx, cy) ?: continue
                         renderTile(
-                            tile.tileId,
+                            tileset[tile.tileId] ?: error("unable to get tile from tileset!"),
                             tile.flips,
                             cx,
                             cy,
@@ -206,9 +230,8 @@ class LDtkLayerView(val layer: Layer, val tileset: TileSet) : View() {
         }
     }
 
-
     private fun renderTile(
-        tileId: Int,
+        tex: BmpSlice,
         flipBits: Int,
         cx: Int,
         cy: Int,
@@ -222,7 +245,6 @@ class LDtkLayerView(val layer: Layer, val tileset: TileSet) : View() {
         colAdd: ColorAdd,
         colMul: RGBA
     ) {
-        val tex = tileset[tileId] ?: error("Unable to get texture from tileset!")
         val flipX = flipBits == 1 || flipBits == 3
         val flipY = flipBits == 2 || flipBits == 3
 
