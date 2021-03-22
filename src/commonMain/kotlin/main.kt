@@ -4,14 +4,13 @@ import com.soywiz.klock.milliseconds
 import com.soywiz.kmem.clamp
 import com.soywiz.korev.Key
 import com.soywiz.korge.Korge
-import com.soywiz.korge.view.addUpdater
-import com.soywiz.korge.view.camera
-import com.soywiz.korge.view.container
+import com.soywiz.korge.view.*
 import com.soywiz.korge.view.tiles.TileSet
 import com.soywiz.korim.color.Colors
 import com.soywiz.korim.format.readBitmap
 import com.soywiz.korio.file.std.resourcesVfs
 import kotlin.math.pow
+import kotlin.math.roundToInt
 
 suspend fun main() =
     Korge(
@@ -35,11 +34,16 @@ suspend fun main() =
                 ldtkMapView(level, tileSet, true)
             }
 
+            val fpsText = text("FPS: ...")
+                .apply { smoothing = false }
+                .alignTopToTopOf(this)
+                .alignLeftToLeftOf(this)
 
             var dx = 0.0
             var dy = 0.0
-            addUpdater {
-                val scale = if (it == 0.milliseconds) 0.0 else (it / 16.666666.milliseconds)
+            var accumulator = 0
+            addUpdater { dt ->
+                val scale = if (dt == 0.milliseconds) 0.0 else (dt / 16.666666.milliseconds)
                 if (views.input.keys[Key.D]) dx -= 1.0
                 if (views.input.keys[Key.A]) dx += 1.0
                 if (views.input.keys[Key.W]) dy += 1.0
@@ -56,6 +60,12 @@ suspend fun main() =
                 camera.y += dy * scale
                 dx *= 0.9.pow(scale)
                 dy *= 0.9.pow(scale)
+
+                accumulator += dt.millisecondsInt
+                if (accumulator > 200) {
+                    fpsText.text = "FPS: ${(1 / dt.seconds).roundToInt()}"
+                    accumulator = 0
+                }
             }
         }
     }
