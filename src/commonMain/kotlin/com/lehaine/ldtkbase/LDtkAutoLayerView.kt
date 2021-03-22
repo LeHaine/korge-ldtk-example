@@ -1,6 +1,6 @@
 package com.lehaine.ldtkbase
 
-import com.lehaine.ldtk.LayerTiles
+import com.lehaine.ldtk.LayerAutoLayer
 import com.soywiz.kds.FastIdentityMap
 import com.soywiz.kds.Pool
 import com.soywiz.kds.clear
@@ -20,10 +20,14 @@ import com.soywiz.korma.geom.Rectangle
 import com.soywiz.korui.layout.MathEx.max
 import com.soywiz.korui.layout.MathEx.min
 
-inline fun Container.ldtkTilesLayer(layer: LayerTiles, tileset: TileSet, callback: LDtkTilesLayerView.() -> Unit = {}) =
-    LDtkTilesLayerView(layer, tileset).addTo(this, callback)
+inline fun Container.ldtkAutoLayer(
+    layer: LayerAutoLayer,
+    tileset: TileSet,
+    callback: LDtkAutoLayerView.() -> Unit = {}
+) =
+    LDtkAutoLayerView(layer, tileset).addTo(this, callback)
 
-class LDtkTilesLayerView(val layer: LayerTiles, val tileset: TileSet) : View() {
+class LDtkAutoLayerView(val layer: LayerAutoLayer, val tileset: TileSet) : View() {
     private var contentVersion = 0
     private var cachedContentVersion = 0
 
@@ -121,95 +125,100 @@ class LDtkTilesLayerView(val layer: LayerTiles, val tileset: TileSet) : View() {
         var count = 0
         for (cy in ymin until ymax) {
             for (cx in xmin until xmax) {
-                if (layer.hasAnyTileAt(cx, cy)) {
-                    layer.getTileStackAt(cx, cy).forEach {
-                        count++
-                        val tex = tileset[it.tileId]!!
-                        val flipX = it.flipBits == 1 || it.flipBits == 3
-                        val flipY = it.flipBits == 2 || it.flipBits == 3
+                val tile = layer.getTileAt(cx, cy) ?: continue
+                count++
+                val tex = tileset[tile.tileId]!!
+                val flipX = tile.flips == 1 || tile.flips == 3
+                val flipY = tile.flips == 2 || tile.flips == 3
 
-                        val info = verticesPerTex.getOrPut(tex.bmpBase) {
-                            infosPool.alloc().also { info ->
-                                info.tex = tex.bmpBase
-                                if (info.vertices.initialVcount < allocTiles * 4) {
-                                    info.vertices =
-                                        TexturedVertexArray(allocTiles * 4, TexturedVertexArray.quadIndices(allocTiles))
-                                }
-                                info.vcount = 0
-                                info.icount = 0
-                                infos += info
-                            }
+                val info = verticesPerTex.getOrPut(tex.bmpBase) {
+                    infosPool.alloc().also { info ->
+                        info.tex = tex.bmpBase
+                        if (info.vertices.initialVcount < allocTiles * 4) {
+                            info.vertices =
+                                TexturedVertexArray(allocTiles * 4, TexturedVertexArray.quadIndices(allocTiles))
                         }
-                        run {
-                            val p0X = posX + (dUX * cx) + (dVX * cy)
-                            val p0Y = posY + (dUY * cx) + (dVY * cy)
-
-                            val p1X = p0X + dUX
-                            val p1Y = p0Y + dUY
-
-                            val p2X = p0X + dUX + dVX
-                            val p2Y = p0Y + dUY + dVY
-
-                            val p3X = p0X + dVX
-                            val p3Y = p0Y + dVY
-
-                            tempX[0] = tex.tl_x
-                            tempX[1] = tex.tr_x
-                            tempX[2] = tex.br_x
-                            tempX[3] = tex.bl_x
-
-                            tempY[0] = tex.tl_y
-                            tempY[1] = tex.tr_y
-                            tempY[2] = tex.br_y
-                            tempY[3] = tex.bl_y
-
-                            computeIndices(flipX = flipX, flipY = flipY, rotate = false, indices = indices)
-
-                            info.vertices.quadV(
-                                info.vcount++,
-                                p0X,
-                                p0Y,
-                                tempX[indices[0]],
-                                tempY[indices[0]],
-                                colMul,
-                                colAdd
-                            )
-                            info.vertices.quadV(
-                                info.vcount++,
-                                p1X,
-                                p1Y,
-                                tempX[indices[1]],
-                                tempY[indices[1]],
-                                colMul,
-                                colAdd
-                            )
-                            info.vertices.quadV(
-                                info.vcount++,
-                                p2X,
-                                p2Y,
-                                tempX[indices[2]],
-                                tempY[indices[2]],
-                                colMul,
-                                colAdd
-                            )
-                            info.vertices.quadV(
-                                info.vcount++,
-                                p3X,
-                                p3Y,
-                                tempX[indices[3]],
-                                tempY[indices[3]],
-                                colMul,
-                                colAdd
-                            )
-                        }
-
-                        info.icount += 6
+                        info.vcount = 0
+                        info.icount = 0
+                        infos += info
                     }
                 }
+                run {
+                    val p0X = posX + (dUX * cx) + (dVX * cy)
+                    val p0Y = posY + (dUY * cx) + (dVY * cy)
+
+                    val p1X = p0X + dUX
+                    val p1Y = p0Y + dUY
+
+                    val p2X = p0X + dUX + dVX
+                    val p2Y = p0Y + dUY + dVY
+
+                    val p3X = p0X + dVX
+                    val p3Y = p0Y + dVY
+
+                    tempX[0] = tex.tl_x
+                    tempX[1] = tex.tr_x
+                    tempX[2] = tex.br_x
+                    tempX[3] = tex.bl_x
+
+                    tempY[0] = tex.tl_y
+                    tempY[1] = tex.tr_y
+                    tempY[2] = tex.br_y
+                    tempY[3] = tex.bl_y
+
+                    computeIndices(flipX = flipX, flipY = flipY, rotate = false, indices = indices)
+
+                    info.vertices.quadV(
+                        info.vcount++,
+                        p0X,
+                        p0Y,
+                        tempX[indices[0]],
+                        tempY[indices[0]],
+                        colMul,
+                        colAdd
+                    )
+                    info.vertices.quadV(
+                        info.vcount++,
+                        p1X,
+                        p1Y,
+                        tempX[indices[1]],
+                        tempY[indices[1]],
+                        colMul,
+                        colAdd
+                    )
+                    info.vertices.quadV(
+                        info.vcount++,
+                        p2X,
+                        p2Y,
+                        tempX[indices[2]],
+                        tempY[indices[2]],
+                        colMul,
+                        colAdd
+                    )
+                    info.vertices.quadV(
+                        info.vcount++,
+                        p3X,
+                        p3Y,
+                        tempX[indices[3]],
+                        tempY[indices[3]],
+                        colMul,
+                        colAdd
+                    )
+                }
+
+                info.icount += 6
             }
         }
 
         renderTilesCounter.increment(count)
+    }
+
+    private fun LayerAutoLayer.getTileAt(cx: Int, cy: Int): LayerAutoLayer.AutoTile? {
+        return if (isCoordValid(cx, cy)) {
+            return autoTiles.find { it.renderX == cx * tileSize && it.renderY == cy * tileSize }
+        } else {
+            null
+        }
     }
 
     private fun computeIndices(
