@@ -32,7 +32,7 @@ suspend fun main() =
 
         container {
             val camera = camera {
-                ldtkMapView(level, tileSet)
+                ldtkMapView(level, tileSet, true)
             }
 
 
