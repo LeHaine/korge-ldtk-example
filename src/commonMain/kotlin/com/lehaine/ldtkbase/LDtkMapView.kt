@@ -15,12 +15,12 @@ class LDtkMapView(val level: Level, val tileset: TileSet) : Container() {
 
     init {
         require(level.isLoaded()) { "Level is not loaded! Please make sure level is loaded before creating an LDtkMapView" }
-        
+
         level.allUntypedLayers.fastForEachReverse { layer ->
             val view: View = when (layer) {
-                is LayerTiles -> ldtkTilesLayer(layer, tileset)
-                is LayerAutoLayer -> ldtkAutoLayer(layer, tileset)
-                is LayerIntGridAutoLayer -> ldtkIntGridAutoLayer(layer, tileset)
+                is LayerTiles,
+                is LayerAutoLayer,
+                is LayerIntGridAutoLayer -> ldtkLayer(layer, tileset)
                 else -> dummyView()
             }
             view.visible(true)
