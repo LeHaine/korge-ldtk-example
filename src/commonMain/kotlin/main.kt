@@ -31,7 +31,7 @@ suspend fun main() =
 
         container {
             val camera = camera {
-                ldtkMapView(level, tileSet, true)
+                ldtkMapView(level, tileSet, renderIntGridLayer = true, debugEntities = true)
             }
 
             val fpsText = text("FPS: ...")

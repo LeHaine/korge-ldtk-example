@@ -9,12 +9,18 @@ import com.soywiz.korim.color.Colors
 inline fun Container.ldtkMapView(
     level: Level,
     tileset: TileSet,
+    renderIntGridLayer: Boolean = false,
     debugEntities: Boolean = false,
     callback: LDtkMapView.() -> Unit = {}
 ) =
-    LDtkMapView(level, tileset, debugEntities).addTo(this, callback)
+    LDtkMapView(level, tileset, renderIntGridLayer, debugEntities).addTo(this, callback)
 
-class LDtkMapView(val level: Level, val tileset: TileSet, val debugEntities: Boolean = false) : Container() {
+class LDtkMapView(
+    val level: Level,
+    val tileset: TileSet,
+    val renderIntGridLayers: Boolean = false,
+    val debugEntities: Boolean = false
+) : Container() {
 
     init {
         require(level.isLoaded()) { "Level is not loaded! Please make sure level is loaded before creating an LDtkMapView" }
@@ -23,8 +29,13 @@ class LDtkMapView(val level: Level, val tileset: TileSet, val debugEntities: Boo
             val view: View = when (layer) {
                 is LayerTiles,
                 is LayerAutoLayer,
-                is LayerIntGrid,
                 is LayerIntGridAutoLayer -> ldtkLayer(layer, tileset)
+                is LayerIntGrid -> {
+                    if (renderIntGridLayers) {
+                        ldtkLayer(layer, tileset)
+                    }
+                    dummyView()
+                }
                 is LayerEntities -> {
                     if (debugEntities) {
                         layer.entities.forEach { entity ->
