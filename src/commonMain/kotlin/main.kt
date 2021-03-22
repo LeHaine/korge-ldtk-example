@@ -23,7 +23,9 @@ suspend fun main() =
     ) {
 
         val world = World().apply { loadAsync() }
-        val level = world.allLevels[0].apply { loadAsync() }
+        var levelIdx = 0
+        val level = world.allLevels[levelIdx].apply { loadAsync() }
+
         val tiles = resourcesVfs["Cavernas_by_Adam_Saltsman.png"].readBitmap().toBMP32IfRequired()
         val slices = TileSet.extractBitmaps(tiles, 8, 8, 12, 12 * 32, 0, 0)
         val tileSet = TileSet.fromBitmaps(8, 8, slices, 1)
@@ -32,6 +34,8 @@ suspend fun main() =
             val camera = camera {
                 ldtkMapView(level, tileSet)
             }
+
+
             var dx = 0.0
             var dy = 0.0
             addUpdater {
@@ -40,6 +44,10 @@ suspend fun main() =
                 if (views.input.keys[Key.A]) dx += 1.0
                 if (views.input.keys[Key.W]) dy += 1.0
                 if (views.input.keys[Key.S]) dy -= 1.0
+                if (views.input.keys[Key.KP_1]) levelIdx = 0
+                if (views.input.keys[Key.KP_2]) levelIdx = 1
+                if (views.input.keys[Key.KP_3]) levelIdx = 2
+                if (views.input.keys[Key.KP_4]) levelIdx = 3
                 if (views.input.keys[Key.ESCAPE]) gameWindow.close()
 
                 dx = dx.clamp(-10.0, +10.0)

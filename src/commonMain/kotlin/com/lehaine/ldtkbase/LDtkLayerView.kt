@@ -110,9 +110,9 @@ class LDtkLayerView(val layer: Layer, val tileset: TileSet) : View() {
         val my3 = ((pp3.y / tileSize) + 1).toInt()
 
         val ymin = max(min(min(min(my0, my1), my2), my3), 0)
-        val ymax = max(max(max(my0, my1), my2), my3)
+        val ymax = min(max(max(max(my0, my1), my2), my3), layer.cHeight)
         val xmin = max(min(min(min(mx0, mx1), mx2), mx3), 0)
-        val xmax = max(max(max(mx0, mx1), mx2), mx3)
+        val xmax = min(max(max(max(mx0, mx1), mx2), mx3), layer.cWidth)
 
 
         val yheight = ymax - ymin
@@ -129,24 +129,23 @@ class LDtkLayerView(val layer: Layer, val tileset: TileSet) : View() {
             for (cx in xmin until xmax) {
                 when (layer.type) {
                     LayerType.IntGrid -> {
-                        if (layer is LayerIntGridAutoLayer) {
-                            val tile = layer.autoTiles.findTileAt(cx, cy) ?: continue
-                            renderTile(
-                                tile.tileId,
-                                tile.flips,
-                                cx,
-                                cy,
-                                posX,
-                                posY,
-                                dUX,
-                                dUY,
-                                dVX,
-                                dVY,
-                                allocTiles,
-                                colAdd,
-                                colMul
-                            )
-                        }
+                        layer as LayerIntGridAutoLayer
+                        val tile = layer.autoTilesCoordIdMap[layer.getCoordId(cx, cy)] ?: continue
+                        renderTile(
+                            tile.tileId,
+                            tile.flips,
+                            cx,
+                            cy,
+                            posX,
+                            posY,
+                            dUX,
+                            dUY,
+                            dVX,
+                            dVY,
+                            allocTiles,
+                            colAdd,
+                            colMul
+                        )
                     }
                     LayerType.Tiles -> {
                         layer as LayerTiles
