@@ -305,14 +305,6 @@ class LDtkLayerView(val layer: Layer, val tileset: TileSet) : View() {
         info.icount += 6
     }
 
-    private fun LayerAutoLayer.getTileAt(cx: Int, cy: Int): LayerAutoLayer.AutoTile? {
-        return if (isCoordValid(cx, cy)) {
-            return autoTiles.find { it.renderX == cx * tileSize && it.renderY == cy * tileSize }
-        } else {
-            null
-        }
-    }
-
     private fun computeIndices(
         flipX: Boolean,
         flipY: Boolean,
