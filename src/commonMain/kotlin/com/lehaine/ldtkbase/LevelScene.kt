@@ -15,7 +15,6 @@ import kotlin.math.roundToInt
 class LevelScene(val world: World, val levelIdx: Int = 0) : Scene() {
 
     override suspend fun Container.sceneInit() {
-        println(levelIdx)
         val level = world.allLevels[levelIdx].toLDtkLevel()
 
         container {
