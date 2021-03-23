@@ -1,5 +1,6 @@
 import com.lehaine.ldtkbase.World
 import com.lehaine.ldtkbase.ldtkMapView
+import com.lehaine.ldtkbase.toLDtkLevel
 import com.soywiz.klock.milliseconds
 import com.soywiz.kmem.clamp
 import com.soywiz.korev.Key
@@ -20,7 +21,7 @@ suspend fun main() =
 
         val world = World().apply { loadAsync() }
         var levelIdx = 0
-        val level = world.allLevels[levelIdx].apply { loadAsync() }
+        val level = world.allLevels[levelIdx].toLDtkLevel()
 
         container {
             val camera = camera {

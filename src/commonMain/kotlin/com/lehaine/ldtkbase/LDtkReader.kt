@@ -3,9 +3,23 @@ package com.lehaine.ldtkbase
 import com.lehaine.ldtk.*
 import com.soywiz.kds.iterators.fastForEach
 import com.soywiz.korge.view.tiles.TileSet
+import com.soywiz.korim.bitmap.sliceWithSize
 import com.soywiz.korim.format.readBitmap
 import com.soywiz.korio.file.std.resourcesVfs
 
+
+suspend fun Level.toLDtkLevel(): LDtkLevel {
+    if (!isLoaded()) {
+        loadAsync()
+    }
+    val tileSets = loadTileSets()
+    val bgImage = if (hasBgImage) resourcesVfs[bgImageInfos!!.relFilePath].readBitmap() else null
+    val slice = bgImage?.let {
+        val cropRect = bgImageInfos!!.cropRect
+        it.sliceWithSize(cropRect.x.toInt(), cropRect.y.toInt(), cropRect.w.toInt(), cropRect.h.toInt())
+    }
+    return LDtkLevel(this, tileSets, slice)
+}
 
 suspend fun Level.loadTileSets(): Map<Int, TileSet> {
     if (!isLoaded()) {
