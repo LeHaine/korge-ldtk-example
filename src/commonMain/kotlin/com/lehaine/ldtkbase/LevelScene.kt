@@ -9,7 +9,7 @@ import com.soywiz.korge.view.*
 import com.soywiz.korim.atlas.readAtlas
 import com.soywiz.korio.async.launchImmediately
 import com.soywiz.korio.file.std.resourcesVfs
-import kotlin.math.roundToInt
+
 
 class LevelScene(val world: World, val levelIdx: Int = 0) : Scene() {
 
@@ -21,7 +21,7 @@ class LevelScene(val world: World, val levelIdx: Int = 0) : Scene() {
         container {
             val playerData = worldLevel.layerEntities.allPlayer[0]
             ldtkMapView(ldtkLevel)
-            val hero = hero(
+            hero(
                 playerData.pixelX.toDouble(),
                 playerData.pixelY.toDouble(),
                 atlas
@@ -29,14 +29,10 @@ class LevelScene(val world: World, val levelIdx: Int = 0) : Scene() {
                 anchor(playerData.pivotX, playerData.pivotY)
             }
 
-            val fpsText = text("FPS: ...")
-                .apply { smoothing = false }
-                .alignTopToTopOf(this)
-                .alignLeftToLeftOf(this)
-
-            var dx = 0.0
-            var dy = 0.0
-            var accumulator = 0
+            fpsLabel {
+                alignTopToTopOf(this)
+                alignLeftToLeftOf(this)
+            }
 
             keys {
                 down(Key.N) {
@@ -55,16 +51,8 @@ class LevelScene(val world: World, val levelIdx: Int = 0) : Scene() {
                 }
 
             }
-            addUpdater { dt ->
+            addUpdater {
                 if (views.input.keys[Key.ESCAPE]) stage?.gameWindow?.close()
-
-                hero.update(dt)
-
-                accumulator += dt.millisecondsInt
-                if (accumulator > 200) {
-                    fpsText.text = "FPS: ${(1 / dt.seconds).roundToInt()}"
-                    accumulator = 0
-                }
             }
         }
     }

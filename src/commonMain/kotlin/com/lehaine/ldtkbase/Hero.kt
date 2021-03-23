@@ -19,7 +19,13 @@ class Hero(x: Double, y: Double, atlas: Atlas) : Sprite(smoothing = false, ancho
     init {
         this.x = x
         this.y = y
+
+        addUpdater {
+            if (stage == null) return@addUpdater
+            update(it)
+        }
     }
+
 
     val animations = Animations(atlas)
     val runSpeed = 0.1
@@ -27,7 +33,7 @@ class Hero(x: Double, y: Double, atlas: Atlas) : Sprite(smoothing = false, ancho
     var dx = 0.0
     var dy = 0.0
 
-    fun update(dt: TimeSpan) {
+    private fun update(dt: TimeSpan) {
         val views = stage?.views!!
         val scale = if (dt == 0.milliseconds) 0.0 else (dt / 16.666666.milliseconds)
         if (views.input.keys[Key.D]) {
