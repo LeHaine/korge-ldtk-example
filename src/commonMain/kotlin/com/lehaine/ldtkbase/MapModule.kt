@@ -12,6 +12,8 @@ object MapModule : Module() {
     override val windowSize: SizeInt = SizeInt(Size(1920, 1080))
     override val size: SizeInt = SizeInt(Size(480, 270))
     override val bgcolor = Colors["#2b2b2b"]
+    override val clipBorders: Boolean
+        get() = super.clipBorders
 
     override suspend fun AsyncInjector.configure() {
         mapInstance(World().apply { loadAsync() })
