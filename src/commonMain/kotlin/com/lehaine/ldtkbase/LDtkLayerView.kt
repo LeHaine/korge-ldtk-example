@@ -26,12 +26,12 @@ import com.soywiz.korui.layout.MathEx.min
 
 inline fun Container.ldtkLayer(
     layer: Layer,
-    tileset: TileSet,
+    tileset: TileSet? = null,
     callback: LDtkLayerView.() -> Unit = {}
 ) =
     LDtkLayerView(layer, tileset).addTo(this, callback)
 
-class LDtkLayerView(val layer: Layer, val tileset: TileSet) : View() {
+class LDtkLayerView(val layer: Layer, val tileset: TileSet? = null) : View() {
     private var contentVersion = 0
     private var cachedContentVersion = 0
 
@@ -134,7 +134,7 @@ class LDtkLayerView(val layer: Layer, val tileset: TileSet) : View() {
                         if (layer is LayerIntGridAutoLayer) {
                             val tile = layer.autoTilesCoordIdMap[layer.getCoordId(cx, cy)] ?: continue
                             renderTile(
-                                tileset[tile.tileId] ?: error("unable to get tile from tileset!"),
+                                tileset?.get(tile.tileId) ?: error("unable to get tile from tileset!"),
                                 tile.flips,
                                 cx,
                                 cy,
@@ -177,7 +177,7 @@ class LDtkLayerView(val layer: Layer, val tileset: TileSet) : View() {
                             layer.getTileStackAt(cx, cy).forEach {
                                 count++
                                 renderTile(
-                                    tileset[it.tileId] ?: error("unable to get tile from tileset!"),
+                                    tileset?.get(it.tileId) ?: error("unable to get tile from tileset!"),
                                     it.flipBits,
                                     cx,
                                     cy,
@@ -198,7 +198,7 @@ class LDtkLayerView(val layer: Layer, val tileset: TileSet) : View() {
                         layer as LayerAutoLayer
                         val tile = layer.autoTiles.findTileAt(cx, cy) ?: continue
                         renderTile(
-                            tileset[tile.tileId] ?: error("unable to get tile from tileset!"),
+                            tileset?.get(tile.tileId) ?: error("unable to get tile from tileset!"),
                             tile.flips,
                             cx,
                             cy,

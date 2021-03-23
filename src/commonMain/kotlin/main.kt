@@ -5,10 +5,7 @@ import com.soywiz.kmem.clamp
 import com.soywiz.korev.Key
 import com.soywiz.korge.Korge
 import com.soywiz.korge.view.*
-import com.soywiz.korge.view.tiles.TileSet
 import com.soywiz.korim.color.Colors
-import com.soywiz.korim.format.readBitmap
-import com.soywiz.korio.file.std.resourcesVfs
 import kotlin.math.pow
 import kotlin.math.roundToInt
 
@@ -25,13 +22,9 @@ suspend fun main() =
         var levelIdx = 0
         val level = world.allLevels[levelIdx].apply { loadAsync() }
 
-        val tiles = resourcesVfs["Cavernas_by_Adam_Saltsman.png"].readBitmap().toBMP32IfRequired()
-        val slices = TileSet.extractBitmaps(tiles, 8, 8, 12, 12 * 32, 0, 0)
-        val tileSet = TileSet.fromBitmaps(8, 8, slices, 1)
-
         container {
             val camera = camera {
-                ldtkMapView(level, tileSet, renderIntGridLayer = true, debugEntities = true)
+                ldtkMapView(level, renderIntGridLayer = true, debugEntities = true)
             }
 
             val fpsText = text("FPS: ...")
