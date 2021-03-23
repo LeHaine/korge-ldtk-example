@@ -9,4 +9,5 @@ data class LDtkLevel(
     val level: Level,
     val tileSets: Map<Int, TileSet>,
     val bgImage: BitmapSlice<Bitmap>? = null,
+    val bgImageInfo: Level.LevelBgImage? = null
 )

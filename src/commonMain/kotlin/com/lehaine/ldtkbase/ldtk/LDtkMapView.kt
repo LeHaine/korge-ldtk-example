@@ -27,7 +27,12 @@ class LDtkMapView(
         require(level.isLoaded()) { "Level is not loaded! Please make sure level is loaded before creating an LDtkMapView" }
 
         if (bgImage != null) {
-            image(texture = bgImage)
+            image(texture = bgImage) {
+                ldtkLevel.level.bgImageInfos?.let {
+                    xy(it.topLeftX, it.topLeftY)
+                    scale(it.scaleX, it.scaleY)
+                }
+            }
         }
         level.allUntypedLayers.fastForEachReverse { layer ->
             val view: View = when (layer) {
