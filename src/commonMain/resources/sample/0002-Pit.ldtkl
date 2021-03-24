@@ -10,7 +10,7 @@
 	},
 	"identifier": "Pit",
 	"uid": 40,
-	"worldX": 272,
+	"worldX": 608,
 	"worldY": 0,
 	"pxWid": 224,
 	"pxHei": 128,
@@ -78,6 +78,17 @@
 							}]
 						}
 					]
+				},
+				{
+					"__identifier": "Player",
+					"__grid": [1,12],
+					"__pivot": [0.5,1],
+					"__tile": null,
+					"width": 8,
+					"height": 10,
+					"defUid": 27,
+					"px": [12,104],
+					"fieldInstances": [{ "__identifier": "Color", "__value": "#000000", "__type": "Color", "defUid": 63, "realEditorValues": [] }]
 				}
 			]
 		},
@@ -641,5 +652,5 @@
 			"entityInstances": []
 		}
 	],
-	"__neighbours": [ { "levelUid": 0, "dir": "w" }, { "levelUid": 39, "dir": "s" } ]
+	"__neighbours": [ { "levelUid": 41, "dir": "e" }, { "levelUid": 39, "dir": "w" } ]
 }

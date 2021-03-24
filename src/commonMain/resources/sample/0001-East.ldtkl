@@ -10,8 +10,8 @@
 	},
 	"identifier": "East",
 	"uid": 39,
-	"worldX": 272,
-	"worldY": 128,
+	"worldX": 304,
+	"worldY": 0,
 	"pxWid": 272,
 	"pxHei": 160,
 	"__bgColor": "#121331",
@@ -50,7 +50,7 @@
 					"__identifier": "Item",
 					"__grid": [9,14],
 					"__pivot": [0.5,1],
-					"__tile": { "tilesetUid": 31, "srcRect": [96,0,16,16] },
+					"__tile": null,
 					"width": 10,
 					"height": 10,
 					"defUid": 29,
@@ -98,6 +98,17 @@
 							}]
 						}
 					]
+				},
+				{
+					"__identifier": "Player",
+					"__grid": [1,7],
+					"__pivot": [0.5,1],
+					"__tile": null,
+					"width": 8,
+					"height": 10,
+					"defUid": 27,
+					"px": [12,64],
+					"fieldInstances": [{ "__identifier": "Color", "__value": "#000000", "__type": "Color", "defUid": 63, "realEditorValues": [] }]
 				}
 			]
 		},
@@ -848,5 +859,5 @@
 			"entityInstances": []
 		}
 	],
-	"__neighbours": [ { "levelUid": 0, "dir": "w" }, { "levelUid": 40, "dir": "n" }, { "levelUid": 41, "dir": "e" } ]
+	"__neighbours": [ { "levelUid": 40, "dir": "e" }, { "levelUid": 0, "dir": "w" } ]
 }

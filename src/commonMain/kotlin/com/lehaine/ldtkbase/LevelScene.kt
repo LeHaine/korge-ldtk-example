@@ -22,7 +22,7 @@ class LevelScene(val world: World, val levelIdx: Int = 0) : Scene() {
         val atlas = resourcesVfs["tiles.atlas.json"].readAtlas()
 
         lateinit var hero: Hero
-        cameraContainer(480.0, 270.0, clip = false) {
+        cameraContainer(480.0, 270.0, clip = true) {
             ldtkMapView(ldtkLevel)
             val playerData = worldLevel.layerEntities.allPlayer[0]
             hero = hero(

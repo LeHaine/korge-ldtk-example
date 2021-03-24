@@ -11,7 +11,7 @@
 	"identifier": "West",
 	"uid": 0,
 	"worldX": 0,
-	"worldY": 40,
+	"worldY": 0,
 	"pxWid": 272,
 	"pxHei": 280,
 	"__bgColor": "#121331",
@@ -61,7 +61,7 @@
 					"__identifier": "Item",
 					"__grid": [20,29],
 					"__pivot": [0.5,1],
-					"__tile": { "tilesetUid": 31, "srcRect": [96,0,16,16] },
+					"__tile": null,
 					"width": 10,
 					"height": 10,
 					"defUid": 29,
@@ -81,7 +81,7 @@
 					"__identifier": "Item",
 					"__grid": [30,12],
 					"__pivot": [0.5,1],
-					"__tile": { "tilesetUid": 31, "srcRect": [16,96,16,16] },
+					"__tile": null,
 					"width": 10,
 					"height": 10,
 					"defUid": 29,
@@ -101,7 +101,7 @@
 					"__identifier": "Item",
 					"__grid": [12,29],
 					"__pivot": [0.5,1],
-					"__tile": { "tilesetUid": 31, "srcRect": [0,0,16,16] },
+					"__tile": null,
 					"width": 10,
 					"height": 10,
 					"defUid": 29,
@@ -2300,5 +2300,5 @@
 			"entityInstances": []
 		}
 	],
-	"__neighbours": [ { "levelUid": 39, "dir": "e" }, { "levelUid": 40, "dir": "e" } ]
+	"__neighbours": [{ "levelUid": 39, "dir": "e" }]
 }
