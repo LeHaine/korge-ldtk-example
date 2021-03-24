@@ -14,16 +14,20 @@ inline fun Container.hero(
 ): Hero = Hero(x, y, atlas).addTo(this, callback)
 
 
-class Hero(x: Double, y: Double, atlas: Atlas) : Sprite(smoothing = false, anchorX = 0.5, anchorY = 1.0) {
+class Hero(x: Double, y: Double, atlas: Atlas) : Container() {
+
+    val sprite = sprite {
+        smoothing = false
+        anchorX = 0.5
+        anchorY = 1.0
+    }
 
     init {
         this.x = x
         this.y = y
 
-        addUpdater {
-            if (stage == null) return@addUpdater
-            update(it)
-        }
+
+        addUpdater { update(it) }
     }
 
 
@@ -34,15 +38,16 @@ class Hero(x: Double, y: Double, atlas: Atlas) : Sprite(smoothing = false, ancho
     var dy = 0.0
 
     private fun update(dt: TimeSpan) {
-        val views = stage?.views!!
+        if (stage == null) return
+        val input = stage?.views?.input!!
         val scale = if (dt == 0.milliseconds) 0.0 else (dt / 16.666666.milliseconds)
-        if (views.input.keys[Key.D]) {
+        if (input.keys[Key.D]) {
             dx += runSpeed
-            scaleX = 1.0
+            sprite.scaleX = 1.0
         }
-        if (views.input.keys[Key.A]) {
+        if (input.keys[Key.A]) {
             dx -= runSpeed
-            scaleX = -1.0
+            sprite.scaleX = -1.0
         }
 
         dx = dx.clamp(-1.5, +1.5)
@@ -55,9 +60,9 @@ class Hero(x: Double, y: Double, atlas: Atlas) : Sprite(smoothing = false, ancho
         }
 
         if (dx == 0.0) {
-            playAnimationLooped(animations.idle)
+            sprite.playAnimationLooped(animations.idle)
         } else {
-            playAnimationLooped(animations.run)
+            sprite.playAnimationLooped(animations.run)
         }
     }
 
